@@ -16,6 +16,7 @@
 #
 import webapp2
 import caesar
+import cgi
 
 def build_page(textarea_content):
     rot_label = "<label>Rotate by: </label>"
@@ -28,7 +29,7 @@ def build_page(textarea_content):
 
     header = "<h2>Web Caesar</h2>"
 
-    return  header + form
+    return header + form
 
 
 class MainHandler(webapp2.RequestHandler):
@@ -41,8 +42,8 @@ class MainHandler(webapp2.RequestHandler):
         message = self.request.get("message")
         rotation = int(self.request.get("rotation"))
         encrypt_message = caesar.encrypt(message, rotation)
-
-        content = build_page(encrypt_message)
+        escaped_message = cgi.escape(encrypt_message)
+        content = build_page(escaped_message)
 
         self.response.write(content)
 
